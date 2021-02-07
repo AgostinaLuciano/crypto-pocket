@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+
+  cp-postgres:
+    image: postgres:latest
+    environment:
+      - "TZ=Europe/Amsterdam"
+      - "POSTGRES_USER=root"
+      - "POSTGRES_PASSWORD=root"
+      - "POSTGRES_DB=cpdb"
+    ports:
+      - 45432:5432
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+
+  cp-adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8083:8080
