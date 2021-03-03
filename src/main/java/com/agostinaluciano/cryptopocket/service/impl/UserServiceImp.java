@@ -21,4 +21,9 @@ public class UserServiceImp implements UserService {
     public List<User> getAll() {
        return userRepository.getAll();
     }
+
+    @Override
+    public User getOne(int id) {
+        return userRepository.getOne(id);
+    }
 }
