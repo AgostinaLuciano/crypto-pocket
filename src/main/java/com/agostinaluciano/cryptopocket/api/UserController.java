@@ -47,6 +47,12 @@ public class UserController {
         userService.saveUser(user);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveUser(@RequestBody User user) {
+        userService.saveUser(user);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void modifyUser(@PathVariable("id") int id, @RequestBody User user) {

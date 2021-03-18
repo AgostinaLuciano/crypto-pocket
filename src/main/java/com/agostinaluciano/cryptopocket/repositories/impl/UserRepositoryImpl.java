@@ -4,6 +4,8 @@ import com.agostinaluciano.cryptopocket.domain.User;
 import com.agostinaluciano.cryptopocket.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -45,6 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
+
     @Override
     public void save(User user) {
         jdbcTemplate.update("INSERT INTO \"users\"(username, password, email) VALUES (?, ?, ?)",
@@ -65,5 +68,6 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteUser(int id) {
         jdbcTemplate.update("DELETE FROM \"users\" WHERE id=?",id);
-    }
+
+    
 }

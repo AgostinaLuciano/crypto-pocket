@@ -12,10 +12,10 @@ public interface UserService {
 
   void saveUser(User user);
 
+
   void modifyUser(int id, User user);
 
   void duplicateUser(int id);
 
   void deleteUser(int id);
-
 }
