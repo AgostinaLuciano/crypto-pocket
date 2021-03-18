@@ -46,4 +46,28 @@ public class UserController {
     public void saveUser(@RequestBody User user) {
         userService.saveUser(user);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveUser(@RequestBody User user) {
+        userService.saveUser(user);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void modifyUser(@PathVariable("id") int id, @RequestBody User user) {
+        userService.modifyUser(id, user);
+    }
+
+    @PutMapping("/dup{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void duplicateUser(@PathVariable("id") int id) {
+        userService.duplicateUser(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable("id") int id) {
+        userService.deleteUser(id);
+    }
+
 }

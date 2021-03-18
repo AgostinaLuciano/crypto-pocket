@@ -19,7 +19,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public List<User> getAll() {
-       return userRepository.getAll();
+        return userRepository.getAll();
     }
 
     @Override
@@ -28,8 +28,24 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void saveUser(User user){
-         userRepository.save(user);
+
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
+
+    @Override
+    public void modifyUser(int id, User user) {
+        userRepository.modifyUser(id, user);
+    }
+
+    @Override
+    public void duplicateUser(int id) {
+        userRepository.duplicateUser( id);
+    }
+    @Override
+    public void deleteUser(int id){
+        userRepository.deleteUser(id);
+
+  
 
 }

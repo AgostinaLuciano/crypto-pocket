@@ -10,4 +10,11 @@ public interface UserRepository {
     User getOne(int id);
 
     void save(User user);
+  
+    void modifyUser(int id, User user);
+
+    void duplicateUser(int id);
+
+    void deleteUser(int id);
+
 }
