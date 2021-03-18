@@ -4,8 +4,6 @@ import com.agostinaluciano.cryptopocket.domain.User;
 import com.agostinaluciano.cryptopocket.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -50,6 +48,22 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void save(User user) {
         jdbcTemplate.update("INSERT INTO \"users\"(username, password, email) VALUES (?, ?, ?)",
-                 user.getUsername(), user.getPassword(), user.getEmail());
+                user.getUsername(), user.getPassword(), user.getEmail());
+    }
+
+    @Override
+    public void modifyUser(int id, User user) {
+        jdbcTemplate.update("UPDATE \"users\" SET username = ?, password = ?, email = ? WHERE id = ?", user.getUsername(),
+                user.getPassword(), user.getEmail(), id);
+    }
+
+    public void duplicateUser(int id) {
+        jdbcTemplate.update("INSERT INTO \"users\" (username, password, email) " +
+                "SELECT  username, password, email FROM \"users\" WHERE id = ?", id);
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        jdbcTemplate.update("DELETE FROM \"users\" WHERE id=?",id);
     }
 }
