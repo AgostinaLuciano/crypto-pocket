@@ -69,5 +69,5 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteUser(int id) {
         jdbcTemplate.update("DELETE FROM \"users\" WHERE id=?",id);
 
-    
+    }
 }
