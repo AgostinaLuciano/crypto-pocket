@@ -4,13 +4,12 @@ import com.agostinaluciano.cryptopocket.domain.User;
 import com.agostinaluciano.cryptopocket.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -35,16 +34,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getOne(int id) {
+    public Optional<User> getOne(int id) {
         LOGGER.info("getting user with id:{} from repository", id);
-        User user = null;
-        try {
-            user = jdbcTemplate.query("SELECT id, username, password, email FROM \"users\" WHERE id = ?",
-                    userMapper, id).get(0);
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-        return user;
+        return jdbcTemplate.query("SELECT id, username, password, email FROM \"users\" WHERE id = ?",
+                userMapper, id).stream().findFirst();
     }
 
 
@@ -67,7 +60,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteUser(int id) {
-        jdbcTemplate.update("DELETE FROM \"users\" WHERE id=?",id);
+        jdbcTemplate.update("DELETE FROM \"users\" WHERE id=?", id);
 
     }
 }

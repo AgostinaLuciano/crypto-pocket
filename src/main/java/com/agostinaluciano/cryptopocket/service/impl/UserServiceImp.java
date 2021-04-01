@@ -7,6 +7,7 @@ import com.agostinaluciano.cryptopocket.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -23,7 +24,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User getOne(int id) {
+    public Optional<User> getOne(int id) {
         return userRepository.getOne(id);
     }
 
