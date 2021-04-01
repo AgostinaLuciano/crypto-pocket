@@ -1,11 +1,11 @@
 package com.agostinaluciano.cryptopocket.api;
 
 import com.agostinaluciano.cryptopocket.domain.User;
+import com.agostinaluciano.cryptopocket.exception.UserNotFoundException;
 import com.agostinaluciano.cryptopocket.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,16 +28,11 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getOne(@PathVariable("id") int id) {
+    public User getOne(@PathVariable("id") int id) {
 
         LOGGER.info(" getting user with id: {}", id);
-        User user = userService.getOne(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            LOGGER.info("user with id: {} not found", id);
-            return ResponseEntity.notFound().build();
-        }
+        return userService.getOne(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + id));
 
     }
 
