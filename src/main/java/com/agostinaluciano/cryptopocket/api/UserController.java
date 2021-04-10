@@ -1,20 +1,21 @@
 package com.agostinaluciano.cryptopocket.api;
 
+import com.agostinaluciano.cryptopocket.coventers.UserConverter;
 import com.agostinaluciano.cryptopocket.domain.User;
+import com.agostinaluciano.cryptopocket.dto.UserDTO;
 import com.agostinaluciano.cryptopocket.exception.UserNotFoundException;
 import com.agostinaluciano.cryptopocket.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private UserService userService;
 
     public UserController(UserService userService) {
@@ -23,15 +24,16 @@ public class UserController {
 
     @GetMapping
     public List<User> getAll() {
-        LOGGER.info("getting all users");
+        log.info("getting all users");
         return userService.getAll();
     }
 
     @GetMapping("/{id}")
-    public User getOne(@PathVariable("id") int id) {
+    public UserDTO getOne(@PathVariable("id") int id) {
 
-        LOGGER.info(" getting user with id: {}", id);
-        return userService.getOne(id)
+        log.info(" getting user with id: {}", id);
+        return userService.getOne(id)//optional user
+                .map(UserConverter::toDto)//Optional de userDTO
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + id));
 
     }
