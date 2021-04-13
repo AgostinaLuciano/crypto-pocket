@@ -5,9 +5,11 @@ import com.agostinaluciano.cryptopocket.dto.UserDTO;
 
 public class UserConverter {
 
-    public static UserDTO toDto(User user){
+    public static UserDTO toDto(User user) {
 
-        UserDTO userDTO=new UserDTO(user.getId(), user.getUsername(), user.getEmail());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail());
         return userDTO;
+
+
     }
 }

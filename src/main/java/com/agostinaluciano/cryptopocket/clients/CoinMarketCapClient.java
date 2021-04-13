@@ -14,7 +14,7 @@ public class CoinMarketCapClient {
     private String apiKey;
     private String url;
 
-    final private  String API_KEY_HEADER = "X-CMC_PRO_API_KEY";
+    final private String API_KEY_HEADER = "X-CMC_PRO_API_KEY";
 
     public CoinMarketCapClient(RestTemplate restTemplate, @Value("${coinmarketcap.api-key}") String apiKey,
                                @Value("${coinmarketcap.url}") String url) {
@@ -25,21 +25,22 @@ public class CoinMarketCapClient {
 
     public ListingQuotesResponseDTO quotes() {
         log.info("getting quotes from coinmarketcap");
-        ResponseEntity<ListingQuotesResponseDTO> respones=
+        ResponseEntity<ListingQuotesResponseDTO> respones =
                 restTemplate.exchange(url, HttpMethod.GET, createRequestEntityWithHeader(API_KEY_HEADER, apiKey), ListingQuotesResponseDTO.class);
         //exchage permite pasar header (vs getForENtity que no)
         return handleResponse(respones);
     }
-    private HttpEntity<String> createRequestEntityWithHeader(String header, String value){
-        HttpHeaders headers= new HttpHeaders();
+
+    private HttpEntity<String> createRequestEntityWithHeader(String header, String value) {
+        HttpHeaders headers = new HttpHeaders();
         headers.add(header, value);
-        HttpEntity<String> entity= new HttpEntity<>(headers);
-        return  entity;
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        return entity;
     }
 
-    private ListingQuotesResponseDTO handleResponse(ResponseEntity<ListingQuotesResponseDTO> response){
-        if(response.getStatusCode() != HttpStatus.OK){
-            log.info("coinmarket cap responded with {} status code",response.getStatusCode());
+    private ListingQuotesResponseDTO handleResponse(ResponseEntity<ListingQuotesResponseDTO> response) {
+        if (response.getStatusCode() != HttpStatus.OK) {
+            log.info("coinmarket cap responded with {} status code", response.getStatusCode());
             throw new IllegalArgumentException("Response Status is not 200");
         }
         return response.getBody();

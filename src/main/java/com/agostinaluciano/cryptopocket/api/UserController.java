@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -23,9 +24,14 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAll() {
+    public List<UserDTO> getAll() {
+
         log.info("getting all users");
-        return userService.getAll();
+        List<UserDTO> userDTOList = userService.getAll()
+                .stream()
+                .map(user -> (UserConverter.toDto(user)))
+                .collect(Collectors.toList());
+        return userDTOList;
     }
 
     @GetMapping("/{id}")
