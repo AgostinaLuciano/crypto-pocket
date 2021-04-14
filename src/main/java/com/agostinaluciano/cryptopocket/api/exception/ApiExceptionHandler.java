@@ -8,13 +8,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value={RuntimeException.class})
-    public ResponseEntity<?> handleInternalServerError(RuntimeException runtimeException){
+    ApiErrorMessage apiErrorMessage;
+
+    @ExceptionHandler(value = {RuntimeException.class})
+    public ResponseEntity<?> handleInternalServerError(RuntimeException runtimeException) {
         return ResponseEntity.status(500).build();
     }
-    @ExceptionHandler(value={UserNotFoundException.class})
-    public ResponseEntity<?> handleError(UserNotFoundException userNotFoundException){
-        return ResponseEntity.status(404).body(userNotFoundException.getMessage());
+
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    public ResponseEntity<?> handleError(UserNotFoundException userNotFoundException) {
+        apiErrorMessage = new ApiErrorMessage("User Not Found");
+        return ResponseEntity.status(404).body(apiErrorMessage.getErrorMessage());
     }
 
 }

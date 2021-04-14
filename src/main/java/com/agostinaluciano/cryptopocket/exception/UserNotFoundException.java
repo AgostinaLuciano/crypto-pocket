@@ -1,10 +1,7 @@
 package com.agostinaluciano.cryptopocket.exception;
 
-public class UserNotFoundException extends RuntimeException{
-    public UserNotFoundException() {
-    }
+import com.agostinaluciano.cryptopocket.api.exception.ApiErrorMessage;
 
-    public UserNotFoundException(String message) {
-        super(message);
-    }
+public class UserNotFoundException extends RuntimeException {
+
 }

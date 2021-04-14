@@ -1,5 +1,6 @@
 package com.agostinaluciano.cryptopocket.api;
 
+import com.agostinaluciano.cryptopocket.api.exception.ApiErrorMessage;
 import com.agostinaluciano.cryptopocket.coventers.UserConverter;
 import com.agostinaluciano.cryptopocket.domain.User;
 import com.agostinaluciano.cryptopocket.dto.UserDTO;
@@ -40,7 +41,7 @@ public class UserController {
         log.info(" getting user with id: {}", id);
         return userService.getOne(id)//optional user
                 .map(UserConverter::toDto)//Optional de userDTO
-                .orElseThrow(() -> new UserNotFoundException("User not found: " + id));
+                .orElseThrow(() -> new UserNotFoundException());
 
     }
 

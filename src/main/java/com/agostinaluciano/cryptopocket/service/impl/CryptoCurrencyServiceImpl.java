@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class CryptoCurrencyServiceImpl implements CryptoCurrencyService {
 
     private CoinMarketCapClient coinMarketCapClient;
+
     private static final String USD_CURRENCY = "USD";
 
     public CryptoCurrencyServiceImpl(CoinMarketCapClient coinMarketCapClient) {
