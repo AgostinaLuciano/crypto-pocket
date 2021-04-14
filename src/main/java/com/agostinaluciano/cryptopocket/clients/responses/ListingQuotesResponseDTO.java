@@ -10,5 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListingQuotesResponseDTO {
+
     private List<ListingElementDTO> data;
 }

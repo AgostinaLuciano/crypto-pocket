@@ -10,5 +10,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuoteDTO {
+
     private BigDecimal price;
 }

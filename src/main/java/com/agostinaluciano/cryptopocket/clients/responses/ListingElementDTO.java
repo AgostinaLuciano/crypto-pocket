@@ -12,5 +12,6 @@ import java.util.Map;
 public class ListingElementDTO {
     private String name;
     private String symbol;
+
     private Map<String, QuoteDTO> quote;
 }
