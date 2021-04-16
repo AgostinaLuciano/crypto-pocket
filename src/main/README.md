@@ -18,4 +18,3 @@ Run the application:
 *mvn spring-boot:run*
 
 Consult the app in [http://localhost:8080/](http://localhost:8080/ "http://localhost:8080/")
-
