@@ -2,14 +2,17 @@ package com.agostinaluciano.cryptopocket.service.impl;
 
 
 import com.agostinaluciano.cryptopocket.domain.User;
+import com.agostinaluciano.cryptopocket.exception.UserNotFoundException;
 import com.agostinaluciano.cryptopocket.repositories.UserRepository;
 import com.agostinaluciano.cryptopocket.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserServiceImp implements UserService {
 
     private UserRepository userRepository;
@@ -47,6 +50,11 @@ public class UserServiceImp implements UserService {
     public void deleteUser(int id){
         userRepository.deleteUser(id);}
 
-  
+    @Override
+    public void validateUser(Integer userId) {
+        log.info("Validating user with id: {}", userId);
+        getOne(userId).orElseThrow(() -> new UserNotFoundException());
+    }
+
 
 }
