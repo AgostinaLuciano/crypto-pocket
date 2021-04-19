@@ -19,4 +19,7 @@ public interface UserService {
   void duplicateUser(int id);
 
   void deleteUser(int id);
+
+  void validateUser(Integer userId);
+
 }
