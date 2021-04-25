@@ -5,8 +5,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-@AllArgsConstructor //constructor que pide todos los parametros
-@Data //da los getter y setter
+@AllArgsConstructor
+@Data
 public class CurrencyQuoteDTO {
 
     private  String crypto;
