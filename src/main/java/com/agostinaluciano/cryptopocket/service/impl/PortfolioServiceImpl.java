@@ -7,6 +7,7 @@ import com.agostinaluciano.cryptopocket.dto.CurrencyTotalDTO;
 import com.agostinaluciano.cryptopocket.dto.PortfolioDTO;
 import com.agostinaluciano.cryptopocket.exception.CryptoCurrencyExeption;
 import com.agostinaluciano.cryptopocket.exception.TransactionNotFoundExeption;
+
 import com.agostinaluciano.cryptopocket.repositories.CryptoCurrencyRepository;
 import com.agostinaluciano.cryptopocket.repositories.TransactionRepository;
 import com.agostinaluciano.cryptopocket.service.CryptoCurrencyService;
@@ -49,6 +50,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         userService.validateUser(userId);
         List<CurrencyQuoteDTO> currencyQuoteDTOList = cryptoCurrencyService.getQuotes();
         List<Transaction> transactionList = transactionRepository.getByUser(userId).orElseThrow(() -> new TransactionNotFoundExeption());
+
         return buildPortfolio(currencyQuoteDTOList, transactionList, userId);
     }
 
@@ -67,7 +69,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         //total de c/ crypto (US$)
         List<CurrencyTotalDTO> currencyTotalDTOList = transactionList.stream()
-
                 .collect(groupingBy(Transaction::getCurrencyId)) //Map<Integer, List<Transaction>>
                 .entrySet()//Set<Integer, List<Transaction>>
                 .stream()

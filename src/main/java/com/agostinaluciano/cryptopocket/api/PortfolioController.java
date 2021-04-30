@@ -22,5 +22,6 @@ public class PortfolioController {
     public PortfolioDTO getPortfolio(@PathVariable("userId") Integer userId){
         log.info("getting portfolio for userId: {}",userId);
         return portfolioService.getPortfolio(userId);
+
     }
 }

@@ -26,6 +26,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
+
     public Optional<List<Transaction>> getByUser(Integer userId) {
         log.info("getting transactions for user id = {}", userId);
         Optional<List<Transaction>> transactionList = Optional.ofNullable( jdbcTemplate.query("SELECT id, user_id, crypto_currency_id, amount, " +
