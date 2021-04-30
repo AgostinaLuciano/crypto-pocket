@@ -52,7 +52,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void validateUser(Integer userId) {
-        log.info("Validating user with id: {}", userId);
+        log.info("User service: Validating user with id: {}", userId);
         getOne(userId).orElseThrow(() -> new UserNotFoundException());
     }
 

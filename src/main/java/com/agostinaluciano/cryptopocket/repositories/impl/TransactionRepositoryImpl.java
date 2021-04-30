@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -25,9 +26,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public List<Transaction> getByUser(Integer userId) {
+    public Optional<List<Transaction>> getByUser(Integer userId) {
         log.info("getting transactions for user id = {}", userId);
-        List<Transaction> transactionList = jdbcTemplate.query("SELECT * FROM transaction WHERE user_id = ?", rowMapper, userId);
+        Optional<List<Transaction>> transactionList = Optional.ofNullable( jdbcTemplate.query("SELECT id, user_id, crypto_currency_id, amount, " +
+                "operation_type, transaction_date FROM transaction WHERE user_id = ?", rowMapper, userId));
         return transactionList;
-    }//TODO
+    }
 }

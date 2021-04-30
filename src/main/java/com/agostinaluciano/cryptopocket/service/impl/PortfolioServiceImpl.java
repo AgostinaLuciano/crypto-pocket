@@ -5,6 +5,8 @@ import com.agostinaluciano.cryptopocket.domain.Transaction;
 import com.agostinaluciano.cryptopocket.dto.CurrencyQuoteDTO;
 import com.agostinaluciano.cryptopocket.dto.CurrencyTotalDTO;
 import com.agostinaluciano.cryptopocket.dto.PortfolioDTO;
+import com.agostinaluciano.cryptopocket.exception.CryptoCurrencyExeption;
+import com.agostinaluciano.cryptopocket.exception.TransactionNotFoundExeption;
 import com.agostinaluciano.cryptopocket.repositories.CryptoCurrencyRepository;
 import com.agostinaluciano.cryptopocket.repositories.TransactionRepository;
 import com.agostinaluciano.cryptopocket.service.CryptoCurrencyService;
@@ -31,7 +33,10 @@ public class PortfolioServiceImpl implements PortfolioService {
     private TransactionRepository transactionRepository;
     private CryptoCurrencyRepository cryptoCurrencyRepository;
 
-    public PortfolioServiceImpl(UserService userService, CryptoCurrencyService cryptoCurrencyService, TransactionRepository transactionRepository, CryptoCurrencyRepository cryptoCurrencyRepository) {
+    public PortfolioServiceImpl(UserService userService,
+                                CryptoCurrencyService cryptoCurrencyService,
+                                TransactionRepository transactionRepository,
+                                CryptoCurrencyRepository cryptoCurrencyRepository) {
         this.userService = userService;
         this.cryptoCurrencyService = cryptoCurrencyService;
         this.transactionRepository = transactionRepository;
@@ -40,10 +45,10 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public PortfolioDTO getPortfolio(Integer userId) {
-        log.info("getting portfolio for {} from service", userId);
+        log.info("getting portfolio for {} ", userId);
         userService.validateUser(userId);
         List<CurrencyQuoteDTO> currencyQuoteDTOList = cryptoCurrencyService.getQuotes();
-        List<Transaction> transactionList = transactionRepository.getByUser(userId);
+        List<Transaction> transactionList = transactionRepository.getByUser(userId).orElseThrow(() -> new TransactionNotFoundExeption());
         return buildPortfolio(currencyQuoteDTOList, transactionList, userId);
     }
 
@@ -54,7 +59,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         Map<String, BigDecimal> quoteInUsd = currencyQuoteDTOList.stream()
                 .collect(Collectors.toMap(crypto -> crypto.getCrypto(), crypto -> crypto.getQuoteInUsd()));
 
-        List<CryptoCurrency> cryptoCurrencies = cryptoCurrencyRepository.getAll();
+        List<CryptoCurrency> cryptoCurrencies = cryptoCurrencyRepository.getAll().orElseThrow(()-> new CryptoCurrencyExeption());
 
         //mapa del id y nombre de la criptomoneda
         Map<Integer, String> cryptoMap = cryptoCurrencies.stream()
@@ -62,21 +67,24 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         //total de c/ crypto (US$)
         List<CurrencyTotalDTO> currencyTotalDTOList = transactionList.stream()
+
                 .collect(groupingBy(Transaction::getCurrencyId)) //Map<Integer, List<Transaction>>
                 .entrySet()//Set<Integer, List<Transaction>>
                 .stream()
                 .map(entry -> new CurrencyTotalDTO(cryptoMap.get(entry.getKey()), entry.getValue()
                         .stream()
+                        .filter(transaction -> quoteInUsd.containsKey(transaction.getCurrencyId()))//TODO filtrar todo
                         .map(transaction -> transaction.getAmount())
                         .reduce(BigDecimal.valueOf(0), (monto, montoOtro) -> (monto.add(montoOtro)))))
                 .collect(Collectors.toList());
 
-        BigDecimal totalUsd= currencyTotalDTOList.stream()
-                .map(currency -> currency.getAmount().multiply((quoteInUsd.get(currency.getCurrency()))))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalUsd = currencyTotalDTOList.stream()
+                .map(currency -> currency.getAmount().multiply(quoteInUsd.get(currency.getCurrency())))
+                .reduce(BigDecimal.valueOf(0), BigDecimal::add);
 
         LocalDateTime localDateTime = LocalDateTime.now();
         PortfolioDTO portfolioDTO = new PortfolioDTO(userId, currencyTotalDTOList, totalUsd, localDateTime);
+        log.info("portfolio construido ");
         return portfolioDTO;
     }
 }

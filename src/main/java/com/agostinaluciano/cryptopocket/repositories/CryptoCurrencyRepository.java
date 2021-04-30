@@ -1,11 +1,11 @@
 package com.agostinaluciano.cryptopocket.repositories;
 
 import com.agostinaluciano.cryptopocket.domain.CryptoCurrency;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface CryptoCurrencyRepository {
-    List<CryptoCurrency> getAll();
+    Optional<List<CryptoCurrency>> getAll();
 }
