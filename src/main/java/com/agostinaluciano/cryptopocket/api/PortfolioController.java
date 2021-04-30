@@ -18,10 +18,10 @@ public class PortfolioController {
         this.portfolioService = portfolioService;
     }
 
-    @RequestMapping("/{userId}") //TODO
+    @RequestMapping("/{userId}")
     public PortfolioDTO getPortfolio(@PathVariable("userId") Integer userId){
-        log.info("gettin portfolio for userId: {}",userId);
-        PortfolioDTO portfolioDTO= portfolioService.getPortfolio(userId);
-        return portfolioDTO;
+        log.info("getting portfolio for userId: {}",userId);
+        return portfolioService.getPortfolio(userId);
+
     }
 }

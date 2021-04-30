@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -23,10 +24,10 @@ public class CryptoCurrencyRepositoryImpl implements CryptoCurrencyRepository {
     }
 
 
-    public List<CryptoCurrency> getAll() {
-        log.info("getting all cryptocurrencies from repository"); //TODO
-        List<CryptoCurrency> cryptoList = jdbcTemplate.query("SELECT * FROM \"cryptocurrency\" ", cryptoCurrencyRowMapper);
-        return cryptoList;
 
+    public Optional<List<CryptoCurrency>> getAll() {
+        log.info("getting all cryptocurrencies ");
+        Optional<List<CryptoCurrency>> cryptoList =Optional.ofNullable(jdbcTemplate.query("SELECT id, name, symbol FROM \"cryptocurrency\" ", cryptoCurrencyRowMapper));
+        return cryptoList;
     }
 }
