@@ -72,25 +72,27 @@ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET
 
 ## Run the app
 
-Start containers using:
+Create Crypto-Pocket's executable and image:
+
+```
+bash build.sh
+```
+
+
+Starts containers using:
 
 ```
 docker-compose up
-```
-
-Run the application:
-
-``` 
-mvn spring-boot:run
 ```
 
 Consult the app in [http://localhost:8080/](http://localhost:8080/ "http://localhost:8080/")
 
 ## Important
 
-You need to have set the following env variables in order to run the application:
+To run the application you need an Api key from CoinMarketCap. You can obtain one [here](https://coinmarketcap.com/api/)
+Then, modify the Docker-compose.yml file to set the variable:
 
 ```
 COINMARKETCAP_API_KEY=<<you have to get one from coinmarketcap>>
-COINMARKETCAP_URL=https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest 
+ 
 ```
