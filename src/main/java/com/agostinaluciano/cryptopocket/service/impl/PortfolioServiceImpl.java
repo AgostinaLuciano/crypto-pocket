@@ -5,8 +5,6 @@ import com.agostinaluciano.cryptopocket.domain.Transaction;
 import com.agostinaluciano.cryptopocket.dto.CurrencyQuoteDTO;
 import com.agostinaluciano.cryptopocket.dto.CurrencyTotalDTO;
 import com.agostinaluciano.cryptopocket.dto.PortfolioDTO;
-import com.agostinaluciano.cryptopocket.exception.CryptoCurrencyExeption;
-import com.agostinaluciano.cryptopocket.exception.TransactionNotFoundExeption;
 
 import com.agostinaluciano.cryptopocket.repositories.CryptoCurrencyRepository;
 import com.agostinaluciano.cryptopocket.repositories.TransactionRepository;
@@ -49,8 +47,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         log.info("getting portfolio for {} ", userId);
         userService.validateUser(userId);
         List<CurrencyQuoteDTO> currencyQuoteDTOList = cryptoCurrencyService.getQuotes();
-        List<Transaction> transactionList = transactionRepository.getByUser(userId).orElseThrow(() -> new TransactionNotFoundExeption());
-
+        List<Transaction> transactionList = transactionRepository.getByUser(userId);
         return buildPortfolio(currencyQuoteDTOList, transactionList, userId);
     }
 
@@ -61,7 +58,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         Map<String, BigDecimal> quoteInUsd = currencyQuoteDTOList.stream()
                 .collect(Collectors.toMap(crypto -> crypto.getCrypto(), crypto -> crypto.getQuoteInUsd()));
 
-        List<CryptoCurrency> cryptoCurrencies = cryptoCurrencyRepository.getAll().orElseThrow(()-> new CryptoCurrencyExeption());
+        List<CryptoCurrency> cryptoCurrencies = cryptoCurrencyRepository.getAll();
 
         //mapa del id y nombre de la criptomoneda
         Map<Integer, String> cryptoMap = cryptoCurrencies.stream()
@@ -74,7 +71,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .stream()
                 .map(entry -> new CurrencyTotalDTO(cryptoMap.get(entry.getKey()), entry.getValue()
                         .stream()
-                        .filter(transaction -> quoteInUsd.containsKey(transaction.getCurrencyId()))//TODO filtrar todo
+                        .filter(transaction -> quoteInUsd.containsKey(transaction.getCurrencyId()))
                         .map(transaction -> transaction.getAmount())
                         .reduce(BigDecimal.valueOf(0), (monto, montoOtro) -> (monto.add(montoOtro)))))
                 .collect(Collectors.toList());

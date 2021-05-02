@@ -1,4 +1,4 @@
-package com.agostinaluciano.cryptopocket.api.exception;
+package com.agostinaluciano.cryptopocket.exception;
 
 public class CoinMarketCapClientExeption extends RuntimeException{
 }

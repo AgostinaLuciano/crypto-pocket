@@ -25,9 +25,9 @@ public class CryptoCurrencyRepositoryImpl implements CryptoCurrencyRepository {
 
 
 
-    public Optional<List<CryptoCurrency>> getAll() {
+    public List<CryptoCurrency> getAll() {
         log.info("getting all cryptocurrencies ");
-        Optional<List<CryptoCurrency>> cryptoList =Optional.ofNullable(jdbcTemplate.query("SELECT id, name, symbol FROM \"cryptocurrency\" ", cryptoCurrencyRowMapper));
+       List<CryptoCurrency> cryptoList =jdbcTemplate.query("SELECT id, name, symbol FROM \"cryptocurrency\" ", cryptoCurrencyRowMapper);
         return cryptoList;
     }
 }

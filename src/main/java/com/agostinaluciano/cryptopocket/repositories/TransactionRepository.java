@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface TransactionRepository {
 
-    Optional<List<Transaction>> getByUser(Integer userId);
+   List<Transaction> getByUser(Integer userId);
 }
