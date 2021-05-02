@@ -27,10 +27,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     @Override
 
-    public Optional<List<Transaction>> getByUser(Integer userId) {
+    public List<Transaction> getByUser(Integer userId) {
         log.info("getting transactions for user id = {}", userId);
-        Optional<List<Transaction>> transactionList = Optional.ofNullable( jdbcTemplate.query("SELECT id, user_id, crypto_currency_id, amount, " +
-                "operation_type, transaction_date FROM transaction WHERE user_id = ?", rowMapper, userId));
+        List<Transaction> transactionList =  jdbcTemplate.query("SELECT id, user_id, crypto_currency_id, amount, " +
+                "operation_type, transaction_date FROM transaction WHERE user_id = ?", rowMapper, userId);
         return transactionList;
     }
 }
