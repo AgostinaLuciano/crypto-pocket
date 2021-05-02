@@ -16,8 +16,11 @@ import java.util.List;
 @Slf4j
 public class CryptoCurrencyController {
 
-    @Autowired
     CryptoCurrencyService cryptoCurrencyService;
+
+    public CryptoCurrencyController(CryptoCurrencyService cryptoCurrencyService) {
+        this.cryptoCurrencyService = cryptoCurrencyService;
+    }
 
     @GetMapping("/quotes")
     public List<CurrencyQuoteDTO> getQuotes() {

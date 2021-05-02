@@ -14,9 +14,17 @@ services:
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
 
-  cw-adminer:
-    image: adminer
-    restart: always
+  cw-cryptopocket:
+    image: agostinaluciano/crypto-pocket
+    environment:
+      - "IP=cw-postgres"
+      - "PORT=5432"
+      - "USERNAME=root"
+      - "PASSWORD=root"
+      - "COINMARKETCAP_API_KEY=<<your>>"
+      - "COINMARKETCAP_URL=https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
+      - "BD=cryptodb"
     ports:
-      - 8083:8080
-
+      - 8080:8080
+    depends_on:
+      - cw-postgres

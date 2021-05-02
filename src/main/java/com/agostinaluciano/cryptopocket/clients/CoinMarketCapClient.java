@@ -1,5 +1,6 @@
 package com.agostinaluciano.cryptopocket.clients;
 
+import com.agostinaluciano.cryptopocket.exception.CoinMarketCapClientExeption;
 import com.agostinaluciano.cryptopocket.clients.responses.ListingQuotesResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +42,7 @@ public class CoinMarketCapClient {
     private ListingQuotesResponseDTO handleResponse(ResponseEntity<ListingQuotesResponseDTO> response) {
         if (response.getStatusCode() != HttpStatus.OK) {
             log.info("coinmarket cap responded with {} status code", response.getStatusCode());
-            throw new IllegalArgumentException("Response Status is not 200");
+            throw new CoinMarketCapClientExeption();
         }
         return response.getBody();
 
