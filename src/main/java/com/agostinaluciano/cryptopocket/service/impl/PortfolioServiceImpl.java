@@ -5,7 +5,6 @@ import com.agostinaluciano.cryptopocket.domain.Transaction;
 import com.agostinaluciano.cryptopocket.dto.CurrencyQuoteDTO;
 import com.agostinaluciano.cryptopocket.dto.CurrencyTotalDTO;
 import com.agostinaluciano.cryptopocket.dto.PortfolioDTO;
-
 import com.agostinaluciano.cryptopocket.repositories.CryptoCurrencyRepository;
 import com.agostinaluciano.cryptopocket.repositories.TransactionRepository;
 import com.agostinaluciano.cryptopocket.service.CryptoCurrencyService;
@@ -64,17 +63,18 @@ public class PortfolioServiceImpl implements PortfolioService {
         Map<Integer, String> cryptoMap = cryptoCurrencies.stream()
                 .collect(Collectors.toMap(crypto -> crypto.getId(), crypto -> crypto.getName()));
 
-        //total de c/ crypto (US$)
+
+        //total de c/ crypto
         List<CurrencyTotalDTO> currencyTotalDTOList = transactionList.stream()
                 .collect(groupingBy(Transaction::getCurrencyId)) //Map<Integer, List<Transaction>>
                 .entrySet()//Set<Integer, List<Transaction>>
                 .stream()
                 .map(entry -> new CurrencyTotalDTO(cryptoMap.get(entry.getKey()), entry.getValue()
                         .stream()
-                        .filter(transaction -> quoteInUsd.containsKey(transaction.getCurrencyId()))
+                        .filter(transaction -> quoteInUsd.containsKey(cryptoMap.get(transaction.getCurrencyId())))
                         .map(transaction -> transaction.getAmount())
-                        .reduce(BigDecimal.valueOf(0), (monto, montoOtro) -> (monto.add(montoOtro)))))
-                .collect(Collectors.toList());
+                        .reduce(BigDecimal.valueOf(0), (amount, otroAmount )-> amount.add(otroAmount)))).collect(Collectors.toList());
+
 
         BigDecimal totalUsd = currencyTotalDTOList.stream()
                 .map(currency -> currency.getAmount().multiply(quoteInUsd.get(currency.getCurrency())))

@@ -96,3 +96,20 @@ Then, modify the Docker-compose.yml file to set the variable:
 COINMARKETCAP_API_KEY=<<you have to get one from coinmarketcap>>
  
 ```
+```
+PASSWORD=root
+ 
+``````
+USERNAME=root
+ 
+``````
+DB=cryptodb
+ 
+``````
+IP=127.0.0.1
+ 
+```
+```
+PUERTO=45432
+ 
+```
