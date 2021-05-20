@@ -24,6 +24,7 @@ services:
       - "COINMARKETCAP_API_KEY=<<your>>"
       - "COINMARKETCAP_URL=https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
       - "DB=cryptodb"
+
     ports:
       - 8080:8080
     depends_on:

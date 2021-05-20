@@ -63,6 +63,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         Map<Integer, String> cryptoMap = cryptoCurrencies.stream()
                 .collect(Collectors.toMap(crypto -> crypto.getId(), crypto -> crypto.getName()));
 
+
         //total de c/ crypto
         List<CurrencyTotalDTO> currencyTotalDTOList = transactionList.stream()
                 .collect(groupingBy(Transaction::getCurrencyId)) //Map<Integer, List<Transaction>>
