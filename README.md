@@ -91,7 +91,7 @@ Consult the app in [http://localhost:8080/](http://localhost:8080/ "http://local
 
 To run the application you need an Api key from CoinMarketCap. You can obtain one [here](https://coinmarketcap.com/api/)
 Then, modify the Docker-compose.yml file to set the variable:
-
+and ip, port, username, password for db
 ```
 COINMARKETCAP_API_KEY=<<you have to get one from coinmarketcap>>
  
