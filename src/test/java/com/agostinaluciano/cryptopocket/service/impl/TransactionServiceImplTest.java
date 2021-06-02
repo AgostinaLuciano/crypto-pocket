@@ -56,6 +56,7 @@ class TransactionServiceImplTest {
 
     @Test
     void WhenUserHasNoTransactionShouldReturnEmptyList() {
+
         int userId = 10;
 
         when(transactionRepository.getByUser(userId)).thenReturn(EMPTY_LIST);
