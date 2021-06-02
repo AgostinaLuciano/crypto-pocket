@@ -1,7 +1,9 @@
 package com.agostinaluciano.cryptopocket.service.impl;
 
 import com.agostinaluciano.cryptopocket.clients.CoinMarketCapClient;
+import com.agostinaluciano.cryptopocket.domain.CryptoCurrency;
 import com.agostinaluciano.cryptopocket.dto.CurrencyQuoteDTO;
+import com.agostinaluciano.cryptopocket.repositories.CryptoCurrencyRepository;
 import com.agostinaluciano.cryptopocket.service.CryptoCurrencyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,13 @@ import java.util.stream.Collectors;
 public class CryptoCurrencyServiceImpl implements CryptoCurrencyService {
 
     private CoinMarketCapClient coinMarketCapClient;
+    private CryptoCurrencyRepository cryptoCurrencyRepository;
 
     private static final String USD_CURRENCY = "USD";
 
-    public CryptoCurrencyServiceImpl(CoinMarketCapClient coinMarketCapClient) {
+    public CryptoCurrencyServiceImpl(CoinMarketCapClient coinMarketCapClient, CryptoCurrencyRepository cryptoCurrencyRepository) {
         this.coinMarketCapClient = coinMarketCapClient;
+        this.cryptoCurrencyRepository = cryptoCurrencyRepository;
     }
 
     @Override
@@ -28,5 +32,10 @@ public class CryptoCurrencyServiceImpl implements CryptoCurrencyService {
                 .stream()
                 .map(elem -> new CurrencyQuoteDTO(elem.getName(), elem.getQuote().get(USD_CURRENCY).getPrice()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CryptoCurrency getCryptoById(Integer id) {
+        return cryptoCurrencyRepository.getCryptoById(id);
     }
 }
