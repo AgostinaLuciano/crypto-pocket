@@ -8,6 +8,7 @@ import com.agostinaluciano.cryptopocket.dto.TransactionDTO;
 import com.agostinaluciano.cryptopocket.exception.UserNotFoundException;
 import com.agostinaluciano.cryptopocket.repositories.TransactionRepository;
 import com.agostinaluciano.cryptopocket.service.CryptoCurrencyService;
+import com.agostinaluciano.cryptopocket.service.PortfolioService;
 import com.agostinaluciano.cryptopocket.service.TransactionService;
 import com.agostinaluciano.cryptopocket.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,11 +39,14 @@ class TransactionServiceImplTest {
     @Mock
     private CryptoCurrencyService cryptoCurrencyService;
 
+    @Mock
+    private PortfolioService portfolioService;
+
     private TransactionService transactionService;
 
     @BeforeEach
     void setup() {
-        transactionService = new TransactionServiceImpl(transactionRepository, cryptoCurrencyService, userService);
+       transactionService = new TransactionServiceImpl(transactionRepository, cryptoCurrencyService, userService, portfolioService);
     }
 
     @Test

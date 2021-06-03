@@ -1,6 +1,8 @@
 package com.agostinaluciano.cryptopocket.api.exception;
 
 import com.agostinaluciano.cryptopocket.exception.CoinMarketCapClientExeption;
+import com.agostinaluciano.cryptopocket.exception.CryptoCurrencyNotFoundException;
+import com.agostinaluciano.cryptopocket.exception.InvalidAmountException;
 import com.agostinaluciano.cryptopocket.exception.UserNotFoundException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,17 @@ public class ApiExceptionHandler {
     return ResponseEntity.status(404).body(apiErrorMessage);
     }
 
+    @ExceptionHandler(value = {CryptoCurrencyNotFoundException.class})
+    public ResponseEntity<?> handleTransferenceError(CryptoCurrencyNotFoundException cryptoCurrencyNotFoundException) {
+        ApiErrorMessage apiErrorMessage = new ApiErrorMessage("Invalid currency");
+        return ResponseEntity.status(404).body(apiErrorMessage);
+    }
+
+    @ExceptionHandler(value = {InvalidAmountException.class})
+    public ResponseEntity<?> handleTransferenceError(InvalidAmountException invalidAmountException) {
+        ApiErrorMessage apiErrorMessage = new ApiErrorMessage("Invalid amount");
+        return ResponseEntity.status(404).body(apiErrorMessage);
+    }
 
     @ExceptionHandler(value ={DataAccessException.class})
     public ResponseEntity<?> handleTransactionError(DataAccessException dataAccessException){
@@ -33,4 +46,5 @@ public class ApiExceptionHandler {
         ApiErrorMessage apiErrorMessage =  new ApiErrorMessage("failed trying to connect to CoinMarketCapApi");
         return ResponseEntity.status(500).body(apiErrorMessage);
     }
+
 }

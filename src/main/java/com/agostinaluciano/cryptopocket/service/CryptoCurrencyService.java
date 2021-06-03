@@ -12,5 +12,7 @@ public interface CryptoCurrencyService {
 
     CryptoCurrency getCryptoById(Integer id);
 
+    CryptoCurrency getCryptoByName(String name);
+
 
 }

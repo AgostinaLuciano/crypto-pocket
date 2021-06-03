@@ -1,6 +1,6 @@
 package com.agostinaluciano.cryptopocket.repositories.impl;
 
-import com.agostinaluciano.cryptopocket.api.exception.CryptoNameException;
+import com.agostinaluciano.cryptopocket.exception.CryptoCurrencyNotFoundException;
 import com.agostinaluciano.cryptopocket.domain.CryptoCurrency;
 import com.agostinaluciano.cryptopocket.repositories.CryptoCurrencyRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -36,6 +35,14 @@ public class CryptoCurrencyRepositoryImpl implements CryptoCurrencyRepository {
          return jdbcTemplate.query("SELECT id, name, symbol FROM \"cryptocurrency\" WHERE id=?", cryptoCurrencyRowMapper,  id)
                  .stream()
                  .findFirst()
-                 .orElseThrow();
+                 .orElseThrow(CryptoCurrencyNotFoundException::new);
+    }
+
+    @Override
+    public CryptoCurrency getCryptoByName(String name) {
+        return jdbcTemplate.query("SELECT id, name, symbol FROM \"cryptocurrency\" WHERE name=?", cryptoCurrencyRowMapper,  name)
+                .stream()
+                .findFirst()
+                .orElseThrow(CryptoCurrencyNotFoundException::new);
     }
 }

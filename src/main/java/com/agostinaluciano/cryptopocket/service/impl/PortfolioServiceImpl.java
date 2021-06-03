@@ -5,6 +5,8 @@ import com.agostinaluciano.cryptopocket.domain.Transaction;
 import com.agostinaluciano.cryptopocket.dto.CurrencyQuoteDTO;
 import com.agostinaluciano.cryptopocket.dto.CurrencyTotalDTO;
 import com.agostinaluciano.cryptopocket.dto.PortfolioDTO;
+import com.agostinaluciano.cryptopocket.dto.TransferenceDTO;
+import com.agostinaluciano.cryptopocket.exception.InvalidAmountException;
 import com.agostinaluciano.cryptopocket.repositories.CryptoCurrencyRepository;
 import com.agostinaluciano.cryptopocket.repositories.TransactionRepository;
 import com.agostinaluciano.cryptopocket.service.CryptoCurrencyService;
@@ -73,7 +75,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                         .stream()
                         .filter(transaction -> quoteInUsd.containsKey(cryptoMap.get(transaction.getCurrencyId())))
                         .map(transaction -> transaction.getAmount())
-                        .reduce(BigDecimal.valueOf(0), (amount, otroAmount )-> amount.add(otroAmount)))).collect(Collectors.toList());
+                        .reduce(BigDecimal.valueOf(0), (amount, otroAmount) -> amount.add(otroAmount)))).collect(Collectors.toList());
 
 
         BigDecimal totalUsd = currencyTotalDTOList.stream()
@@ -84,5 +86,22 @@ public class PortfolioServiceImpl implements PortfolioService {
         PortfolioDTO portfolioDTO = new PortfolioDTO(userId, currencyTotalDTOList, totalUsd, localDateTime);
         log.info("portfolio construido ");
         return portfolioDTO;
+    }
+
+    @Override
+    public void validateFunds(TransferenceDTO transferenceDTO) {
+
+        Map<String, BigDecimal> portfolioTransmiter = getPortfolio(transferenceDTO.getTransmiterId()).getCurrencies()
+                .stream()
+                .collect(Collectors.toMap(currencyTotalDTO -> currencyTotalDTO.getCurrency(), CurrencyTotalDTO::getAmount));
+
+        BigDecimal currencyHoldingTransmiter = portfolioTransmiter.get(transferenceDTO.getCurrency());
+
+        boolean invalidAmount = ((transferenceDTO.getAmount().compareTo(BigDecimal.valueOf(0)) < 0));
+        boolean insufficientFunds = (((transferenceDTO.getAmount().compareTo(currencyHoldingTransmiter)) >= 0));
+
+        if (invalidAmount || insufficientFunds) {
+            throw new InvalidAmountException();
+        }
     }
 }
