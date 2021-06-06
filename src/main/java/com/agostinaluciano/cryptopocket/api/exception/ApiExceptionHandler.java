@@ -19,7 +19,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(value = {UserNotFoundException.class})
-    public ResponseEntity<?> handleError(UserNotFoundException userNotFoundException) {
+    public ResponseEntity<?> handleErrorUserError(UserNotFoundException userNotFoundException) {
     ApiErrorMessage apiErrorMessage = new ApiErrorMessage("User Not Found");
     return ResponseEntity.status(404).body(apiErrorMessage);
     }
@@ -27,13 +27,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler(value = {CryptoCurrencyNotFoundException.class})
     public ResponseEntity<?> handleTransferenceError(CryptoCurrencyNotFoundException cryptoCurrencyNotFoundException) {
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage("Invalid currency");
-        return ResponseEntity.status(404).body(apiErrorMessage);
+        return ResponseEntity.status(400).body(apiErrorMessage);
     }
 
     @ExceptionHandler(value = {InvalidAmountException.class})
     public ResponseEntity<?> handleTransferenceError(InvalidAmountException invalidAmountException) {
         ApiErrorMessage apiErrorMessage = new ApiErrorMessage("Invalid amount");
-        return ResponseEntity.status(404).body(apiErrorMessage);
+        return ResponseEntity.status(400).body(apiErrorMessage);
     }
 
     @ExceptionHandler(value ={DataAccessException.class})
