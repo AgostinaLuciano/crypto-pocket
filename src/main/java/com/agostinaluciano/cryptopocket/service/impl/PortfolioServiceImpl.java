@@ -75,7 +75,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                         .stream()
                         .filter(transaction -> quoteInUsd.containsKey(cryptoMap.get(transaction.getCurrencyId())))
                         .map(transaction -> transaction.getAmount())
-                        .reduce(BigDecimal.valueOf(0), (amount, otroAmount) -> amount.add(otroAmount)))).collect(Collectors.toList());
+                        .reduce(BigDecimal.valueOf(0), (amount, otherAmount) -> amount.add(otherAmount)))).collect(Collectors.toList());
 
 
         BigDecimal totalUsd = currencyTotalDTOList.stream()
@@ -97,8 +97,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         BigDecimal currencyHoldingTransmiter = portfolioTransmiter.get(transferenceDTO.getCurrency());
 
-        boolean invalidAmount = ((transferenceDTO.getAmount().compareTo(BigDecimal.valueOf(0)) < 0));
-        boolean insufficientFunds = (((transferenceDTO.getAmount().compareTo(currencyHoldingTransmiter)) >= 0));
+        boolean invalidAmount = (transferenceDTO.getAmount().compareTo(BigDecimal.ZERO) < 0);
+        boolean insufficientFunds = ((transferenceDTO.getAmount().compareTo(currencyHoldingTransmiter)) >= 0);
 
         if (invalidAmount || insufficientFunds) {
             throw new InvalidAmountException();
