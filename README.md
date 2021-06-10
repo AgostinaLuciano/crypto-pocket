@@ -16,6 +16,10 @@ Crypto-pocket is an app thought to manage your holdings,  send, recive, adquire 
 
 ![Alt text](diagrams/data-model.png?raw=true "Title")
 
+## Transferences Sequence
+
+![Alt text](diagrams/transference-sequence.png?raw=true "transferences")
+
 ## API
 
 * Healthcheck

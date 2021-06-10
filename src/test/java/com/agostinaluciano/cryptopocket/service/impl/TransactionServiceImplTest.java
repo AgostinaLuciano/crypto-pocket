@@ -26,8 +26,7 @@ import java.util.List;
 
 import static java.util.Collections.EMPTY_LIST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -142,11 +141,26 @@ class TransactionServiceImplTest {
 
     @Test
     public void whenCryptoIsInvalidShouldThrowCryptoCurrencyNotFoundException() {
+        //given
         TransferenceDTO transferenceDTO = new TransferenceDTO("Bitcoin", BigDecimal.valueOf(-10), 1, 3);
 
+        //when
         doThrow(CryptoCurrencyNotFoundException.class).when(portfolioService).validateFunds(transferenceDTO);
 
+        //then
         assertThrows(CryptoCurrencyNotFoundException.class, () -> transactionService.transfer(transferenceDTO));
+    }
+
+    @Test
+    public void whenTransferIsOkDoesNotThrowException() {
+        //given
+        TransferenceDTO transferenceDTO = new TransferenceDTO("Bitcoin", BigDecimal.valueOf(10), 1, 3);
+
+
+        //then
+        assertDoesNotThrow(transactionService.transfer(transferenceDTO));
+        assertThrows(CryptoCurrencyNotFoundException.class, () -> transactionService.transfer(transferenceDTO));
+
     }
 
 
