@@ -11,4 +11,5 @@ public class TransactionConverter {
                 name, transaction.getAmount(), transaction.getOperationType(), transaction.getTransactionDate());
         return transactionDTO;
     }
+
 }

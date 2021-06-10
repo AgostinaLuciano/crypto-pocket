@@ -5,9 +5,13 @@ import com.agostinaluciano.cryptopocket.domain.CryptoCurrency;
 import com.agostinaluciano.cryptopocket.domain.OperationType;
 import com.agostinaluciano.cryptopocket.domain.Transaction;
 import com.agostinaluciano.cryptopocket.dto.TransactionDTO;
+import com.agostinaluciano.cryptopocket.dto.TransferenceDTO;
+import com.agostinaluciano.cryptopocket.exception.CryptoCurrencyNotFoundException;
+import com.agostinaluciano.cryptopocket.exception.InvalidAmountException;
 import com.agostinaluciano.cryptopocket.exception.UserNotFoundException;
 import com.agostinaluciano.cryptopocket.repositories.TransactionRepository;
 import com.agostinaluciano.cryptopocket.service.CryptoCurrencyService;
+import com.agostinaluciano.cryptopocket.service.PortfolioService;
 import com.agostinaluciano.cryptopocket.service.TransactionService;
 import com.agostinaluciano.cryptopocket.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +26,7 @@ import java.util.List;
 
 import static java.util.Collections.EMPTY_LIST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -38,11 +41,14 @@ class TransactionServiceImplTest {
     @Mock
     private CryptoCurrencyService cryptoCurrencyService;
 
+    @Mock
+    private PortfolioService portfolioService;
+
     private TransactionService transactionService;
 
     @BeforeEach
     void setup() {
-        transactionService = new TransactionServiceImpl(transactionRepository, cryptoCurrencyService, userService);
+        transactionService = new TransactionServiceImpl(transactionRepository, cryptoCurrencyService, userService, portfolioService);
     }
 
     @Test
@@ -51,7 +57,6 @@ class TransactionServiceImplTest {
         int userId = 100;
         doThrow(UserNotFoundException.class).when(userService).validateUser(userId);
         assertThrows(UserNotFoundException.class, () -> transactionService.getTransactionsByUser(userId));
-
     }
 
     @Test
@@ -62,7 +67,6 @@ class TransactionServiceImplTest {
         when(transactionRepository.getByUser(userId)).thenReturn(EMPTY_LIST);
 
         List<TransactionDTO> result = transactionService.getTransactionsByUser(userId);
-
 
         assertThat(result).isEqualTo(EMPTY_LIST);
     }
@@ -124,6 +128,39 @@ class TransactionServiceImplTest {
         assertEquals(result.size(), 2);
         assertEquals(result, expectedResult);
         assertEquals(result.get(1), secondTransactionDTO);
+    }
+
+    @Test
+    public void whenAmountIsInvalidShouldThrowInvalidAmountException() {
+        TransferenceDTO transferenceDTO = new TransferenceDTO("Bitcoin", BigDecimal.valueOf(-10), 1, 3);
+
+        doThrow(InvalidAmountException.class).when(portfolioService).validateFunds(transferenceDTO);
+
+        assertThrows(InvalidAmountException.class, () -> transactionService.transfer(transferenceDTO));
+    }
+
+    @Test
+    public void whenCryptoIsInvalidShouldThrowCryptoCurrencyNotFoundException() {
+        //given
+        TransferenceDTO transferenceDTO = new TransferenceDTO("Bitcoin", BigDecimal.valueOf(-10), 1, 3);
+
+        //when
+        doThrow(CryptoCurrencyNotFoundException.class).when(portfolioService).validateFunds(transferenceDTO);
+
+        //then
+        assertThrows(CryptoCurrencyNotFoundException.class, () -> transactionService.transfer(transferenceDTO));
+    }
+
+    @Test
+    public void whenTransferIsOkDoesNotThrowException() {
+        //given
+        TransferenceDTO transferenceDTO = new TransferenceDTO("Bitcoin", BigDecimal.valueOf(10), 1, 3);
+
+
+        //then
+        assertDoesNotThrow(transactionService.transfer(transferenceDTO));
+        assertThrows(CryptoCurrencyNotFoundException.class, () -> transactionService.transfer(transferenceDTO));
+
     }
 
 

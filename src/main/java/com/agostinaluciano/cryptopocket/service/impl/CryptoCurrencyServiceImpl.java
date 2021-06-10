@@ -38,4 +38,9 @@ public class CryptoCurrencyServiceImpl implements CryptoCurrencyService {
     public CryptoCurrency getCryptoById(Integer id) {
         return cryptoCurrencyRepository.getCryptoById(id);
     }
+
+    @Override
+    public CryptoCurrency getCryptoByName(String name) {
+        return cryptoCurrencyRepository.getCryptoByName(name);
+    }
 }

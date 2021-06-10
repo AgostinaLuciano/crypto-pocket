@@ -10,4 +10,7 @@ public interface CryptoCurrencyRepository {
     List<CryptoCurrency> getAll();
 
     CryptoCurrency getCryptoById(Integer id);
+
+    CryptoCurrency getCryptoByName(String name);
+
 }
