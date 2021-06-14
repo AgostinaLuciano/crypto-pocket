@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -40,13 +39,20 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public void saveTransaction(Integer userId, int cryptoId, BigDecimal amount, OperationType operationType) {
 
         log.info("verifying amount and inserting in DB");
-        if(operationType==OperationType.SELL){
-            amount= amount.negate();
+        if (operationType == OperationType.SELL) {
+            amount = amount.negate();
         }
 
         jdbcTemplate.update("INSERT into \"transaction\" (user_id, crypto_currency_id, amount, operation_type, transaction_date) VALUES (?, ?, ?, ?, ?)",
                 userId, cryptoId, amount, operationType.name(), LocalDateTime.now());
 
+    }
+
+    @Override
+    public List<Transaction> getTodayTransactions() {
+        log.info("getting transferences in last 24 hs");
+        List<Transaction> last24hsTransactions = jdbcTemplate.query("SELECT id, user_id, crypto_currency_id, amount, operation_type, transaction_date FROM \"transaction\" WHERE transaction_date between current_date - INTEGER '1' and current_date", rowMapper);
+        return last24hsTransactions;
     }
 
 
