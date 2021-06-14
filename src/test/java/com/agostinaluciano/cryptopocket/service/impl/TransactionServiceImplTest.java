@@ -40,7 +40,6 @@ class TransactionServiceImplTest {
     private TransactionRepository transactionRepository;
     @Mock
     private CryptoCurrencyService cryptoCurrencyService;
-
     @Mock
     private PortfolioService portfolioService;
 
@@ -158,7 +157,7 @@ class TransactionServiceImplTest {
 
 
         //then
-        assertDoesNotThrow(transactionService.transfer(transferenceDTO));
+        //assertDoesNotThrow(transactionService.transfer(transferenceDTO));
         assertThrows(CryptoCurrencyNotFoundException.class, () -> transactionService.transfer(transferenceDTO));
 
     }

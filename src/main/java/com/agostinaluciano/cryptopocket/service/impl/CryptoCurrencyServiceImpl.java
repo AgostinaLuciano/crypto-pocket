@@ -43,4 +43,8 @@ public class CryptoCurrencyServiceImpl implements CryptoCurrencyService {
     public CryptoCurrency getCryptoByName(String name) {
         return cryptoCurrencyRepository.getCryptoByName(name);
     }
+
+    public List<CryptoCurrency> getAll(){
+        return cryptoCurrencyRepository.getAll();
+    }
 }

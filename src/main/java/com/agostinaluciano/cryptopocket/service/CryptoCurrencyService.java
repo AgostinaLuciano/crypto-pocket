@@ -14,5 +14,7 @@ public interface CryptoCurrencyService {
 
     CryptoCurrency getCryptoByName(String name);
 
+    List<CryptoCurrency> getAll();
+
 
 }
